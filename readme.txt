@@ -5,15 +5,28 @@ const cryptoApiHeaders = {
   "x-rapidapi-key": "3c20657452msh557ec4eaa23143ep191fbajsn4baaaf953e8b",
 };
 
-const baseUrl = "https://coinranking1.p.rapidapi.com";
-const createRequest = (url) => ({ url, headers: cryptoApiHeaders });
+const baseUrl = "https://coinranking1.p.rapidapi.com/exchanges";
+// var axios = require("axios").default;
+
+// var options = {
+//   method: 'GET',
+//   url: 'https://coinranking1.p.rapidapi.com/exchanges',
+//   headers: {
+//
+//   }
+// };
+
+const createRequest = (url) => ({
+  url,
+  headers: cryptoApiHeaders,
+});
 
 export const cryptoApi = createApi({
   reducerPath: "cryptoApi",
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
     getCryptos: builder.query({
-      query: (count) => createRequest(`/coins?limit=${count}`),
+      query: () => createRequest("/coins"),
     }),
   }),
 });
