@@ -1,51 +1,50 @@
 import React from "react";
-
+import millify from "millify";
 import { Typography, Row, Col, Statistic } from "antd";
 import { Link } from "react-router-dom";
 
 import { useGetCryptosQuery } from "../services/cryptoApi";
-import millify from "millify";
-import { CryptoCurrencies, News } from "../components";
+import { CryptoCurrencies } from "../components";
+import News from "./News";
+import Loader from "./Loader";
 
-const HomePage = () => {
-  const { Title } = Typography;
+const { Title } = Typography;
 
-  const { data, isFetching } = useGetCryptosQuery(20);
-
-  // global stats
+const Homepage = () => {
+  const { data, isFetching } = useGetCryptosQuery(10);
   const globalStats = data?.data?.stats;
 
-  console.log(data);
-  if (isFetching) return "Loading ...";
+  if (isFetching) return <Loader />;
+
   return (
     <>
-      <Title level={1} className="heading">
+      <Title level={2} className="heading">
         Global Crypto Stats
       </Title>
-      <Row>
+      <Row gutter={[32, 32]}>
+        <Col span={12}>
+          <Statistic title="Total Cryptocurrencies" value={globalStats.total} />
+        </Col>
         <Col span={12}>
           <Statistic
-            title="Total crypto currencies"
-            value={globalStats.total}
+            title="Total Exchanges"
+            value={millify(globalStats.totalExchanges)}
           />
         </Col>
         <Col span={12}>
           <Statistic
-            title="Total exchanges"
-            value={globalStats.totalExchanges}
+            title="Total Market Cap:"
+            value={`$${millify(globalStats.totalMarketCap)}`}
           />
         </Col>
         <Col span={12}>
           <Statistic
-            title="Total market cap"
-            value={millify(globalStats.totalMarketCap)}
+            title="Total 24h Volume"
+            value={`$${millify(globalStats.total24hVolume)}`}
           />
         </Col>
         <Col span={12}>
-          <Statistic
-            title="Total 24hour volume"
-            value={millify(globalStats.total24hVolume)}
-          />
+          <Statistic title="Total Cryptocurrencies" value={globalStats.total} />
         </Col>
         <Col span={12}>
           <Statistic
@@ -56,10 +55,10 @@ const HomePage = () => {
       </Row>
       <div className="home-heading-container">
         <Title level={2} className="home-title">
-          Top 20 Cryptocurrencies in the world
+          Top 10 Cryptos In The World
         </Title>
         <Title level={3} className="show-more">
-          <Link to="/cryptocurrencies"> Show More</Link>
+          <Link to="/cryptocurrencies">Show more</Link>
         </Title>
       </div>
       <CryptoCurrencies simplified />
@@ -67,8 +66,8 @@ const HomePage = () => {
         <Title level={2} className="home-title">
           Latest Crypto News
         </Title>
-        <Title level={3} className="show-more">
-          <Link to="/news"> Show More</Link>
+        <Title level={3}>
+          <Link to="/news">Show more</Link>
         </Title>
       </div>
       <News simplified />
@@ -76,4 +75,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Homepage;
